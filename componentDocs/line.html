@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>singleLine</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    
+    <meta name="description" content="">
+    
+    <link rel="preload" href="/assets/css/0.styles.96c8702f.css" as="style"><link rel="preload" href="/assets/js/app.db924238.js" as="script"><link rel="preload" href="/assets/js/3.45862ee5.js" as="script"><link rel="preload" href="/assets/js/10.768181d6.js" as="script"><link rel="preload" href="/assets/js/7.daf4e98f.js" as="script"><link rel="prefetch" href="/assets/js/2.989c168a.js"><link rel="prefetch" href="/assets/js/4.a012af53.js"><link rel="prefetch" href="/assets/js/5.e2585c4c.js"><link rel="prefetch" href="/assets/js/6.e640369f.js"><link rel="prefetch" href="/assets/js/8.c340de0a.js"><link rel="prefetch" href="/assets/js/9.1bd6380a.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.96c8702f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" aria-current="page" class="sidebar-link">Hello VuePress</a></li><li><a href="/componentDocs/line.html" aria-current="page" class="active sidebar-link">singleLine</a><ul class="sidebar-sub-headers"></ul></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="singleline"><a href="#singleline" class="header-anchor">#</a> singleLine</h1> <p>单条折线图组件</p> <h3 id="示例"><a href="#示例" class="header-anchor">#</a> 示例</h3> <p><div><div id="elId" option="[object Object]" style="width:100%;height:300px;"></div></div></p> <h3 id="属性"><a href="#属性" class="header-anchor">#</a> 属性</h3> <table><thead><tr><th>参数</th> <th>说明</th> <th>类型</th> <th>是否必要</th> <th>默认值</th></tr></thead> <tbody><tr><td>xData</td> <td>轴数据</td> <td>Array</td> <td>true</td> <td>[&quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;, &quot;2020&quot;]</td></tr> <tr><td>yData</td> <td>纵轴数据</td> <td>Array</td> <td>true</td> <td>[&quot;30&quot;, &quot;60&quot;, &quot;22&quot;, &quot;85&quot;, &quot;50&quot;]</td></tr> <tr><td>unit</td> <td>数据单位</td> <td>String</td> <td>true</td> <td>条</td></tr></tbody></table> <h3 id="代码"><a href="#代码" class="header-anchor">#</a> 代码</h3> <div class="language- extra-class"><pre class="language-text"><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;div id=&quot;elId&quot; ref=&quot;chart&quot; :option=&quot;option&quot; :style=&quot;style&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import echarts from &quot;echarts&quot;;
+import uuidv4 from &quot;uuid/v4&quot;;
+export default {
+  props: {
+    list: {
+      type: Object,
+      default: () =&gt; {
+        return {
+          label: [&quot;2016&quot;, &quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;, &quot;2020&quot;],
+          barData: [&quot;30&quot;, &quot;60&quot;, &quot;22&quot;, &quot;85&quot;, &quot;50&quot;],
+        };
+      },
+    },
+    width: {
+      type: String,
+      default: &quot;100%&quot;,
+    },
+    height: {
+      type: String,
+      default: &quot;300&quot;,
+    },
+  },
+  data() {
+    return {
+      style: {
+        width: this.width,
+        height: this.height + &quot;px&quot;,
+      },
+      elId: &quot;&quot;,
+      timer: null,
+      option: {},
+      chartData: [],
+    };
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler() {
+        clearInterval(this.timer);
+        this.init();
+      },
+    },
+  },
+  mounted() {
+    this.elId = uuidv4(); // 获取随机id
+    this.init();
+    clearInterval(this.timer);
+  },
+
+  methods: {
+    init() {
+      let xLabel = this.list.label;
+      let goToSchool = this.list.barData;
+      var myChart = echarts.init(document.getElementById('elId'));
+      this.option = {
+        tooltip: {
+          trigger: &quot;axis&quot;,
+          backgroundColor: &quot;transparent&quot;,
+          axisPointer: {
+            lineStyle: {
+              color: {
+                type: &quot;linear&quot;,
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: &quot;rgba(126,199,255,0)&quot;, // 0% 处的颜色
+                  },
+                  {
+                    offset: 0.5,
+                    color: &quot;rgba(126,199,255,1)&quot;, // 100% 处的颜色
+                  },
+                  {
+                    offset: 1,
+                    color: &quot;rgba(126,199,255,0)&quot;, // 100% 处的颜色
+                  },
+                ],
+                global: false, // 缺省为 false
+              },
+            },
+          },
+          formatter: function (params) {
+            var relVal = params[0].name;
+            for (var i = 0, l = params.length; i &lt; l; i++) {
+              relVal +=
+                &quot;&lt;br/&gt;&quot; +
+                params[i].seriesName +
+                &quot; : &quot; +
+                params[i].value +
+                &quot; 条&quot;;
+            }
+            return relVal;
+          },
+        },
+        grid: {
+          top: &quot;5%&quot;,
+          left: &quot;5%&quot;,
+          right: &quot;5%&quot;,
+          bottom: &quot;14%&quot;,
+          // containLabel: true
+        },
+        xAxis: [
+          {
+            type: &quot;category&quot;,
+            boundaryGap: false,
+            axisLine: {
+              //坐标轴轴线相关设置。数学上的x轴
+              show: true,
+              lineStyle: {
+                color: &quot;rgba(7,253,250, 0.5)&quot;,
+              },
+            },
+            axisLabel: {
+              //坐标轴刻度标签的相关设置
+              textStyle: {
+                color: &quot;#7ec7ff&quot;,
+
+                fontSize: 14,
+              },
+              formatter: function (data) {
+                return data;
+              },
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: &quot;#192a44&quot;,
+              },
+            },
+            axisTick: {
+              show: false,
+            },
+            boundaryGap: true,
+            data: xLabel,
+          },
+        ],
+        yAxis: [
+          {
+            // name: '人数',
+            nameTextStyle: {
+              color: &quot;#7ec7ff&quot;,
+              fontSize: 16,
+            },
+            min: 0,
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: &quot;#192a44&quot;,
+              },
+            },
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: &quot;rgba(7,253,250, 0.5)&quot;,
+              },
+            },
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: &quot;#7ec7ff&quot;,
+              },
+              formatter: function (value) {
+                if (value === 0) {
+                  return value;
+                }
+                return value;
+              },
+            },
+            axisTick: {
+              show: false,
+            },
+          },
+        ],
+        series: [
+          {
+            name: &quot;条数&quot;,
+            type: &quot;line&quot;,
+            symbol: &quot;circle&quot;, // 默认是空心圆（中间是白色的），改成实心圆
+            showAllSymbol: true,
+            symbolSize: 2,
+            smooth: false,
+            lineStyle: {
+              normal: {
+                width: 2,
+                color: &quot;#07fdfa&quot;, // 线条颜色
+              },
+            },
+            itemStyle: {
+              color: &quot;#07fdfa&quot;,
+              borderColor: &quot;#07fdfa&quot;,
+              borderWidth: 3,
+            },
+            tooltip: {
+              show: true,
+            },
+            areaStyle: {
+              //区域填充样式
+              normal: {
+                //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: &quot;#0b2953&quot;,
+                    },
+                    {
+                      offset: 1,
+                      color: &quot;rgba(7,253,250, 0)&quot;,
+                    },
+                  ],
+                  false
+                ),
+                shadowColor: &quot;rgba(7,253,250, 0.5)&quot;, //阴影颜色
+                shadowBlur: 20, //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
+              },
+            },
+            data: goToSchool,
+          },
+        ],
+      };
+      myChart.setOption(this.option);
+      let len = 0;
+      this.timer = setInterval(() =&gt; {
+        if (len === xLabel.length) {
+          len = 0;
+        }
+        myChart.dispatchAction({
+          type: &quot;showTip&quot;,
+          seriesIndex: 0,
+          dataIndex: len,
+        });
+        len++;
+      }, 3000);
+    },
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
+};
+&lt;/script&gt;
+
+&lt;style&gt;
+&lt;/style&gt;
+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/" class="prev router-link-active">
+        Hello VuePress
+      </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.db924238.js" defer></script><script src="/assets/js/3.45862ee5.js" defer></script><script src="/assets/js/10.768181d6.js" defer></script><script src="/assets/js/7.daf4e98f.js" defer></script>
+  </body>
+</html>
